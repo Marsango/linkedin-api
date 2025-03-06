@@ -635,10 +635,16 @@ class Linkedin(object):
                 "start": len(results) + offset,
             }
 
+            query_params = "&".join(
+                f"{quote(str(key))}={quote(str(value), safe='(),:')}"
+                for key, value in default_params.items()
+            )
+
             res = self._fetch(
-                f"/voyagerJobsDashJobCards?{urlencode(default_params, safe='(),:')}",
+                f"/voyagerJobsDashJobCards?{query_params}",
                 headers={"accept": "application/vnd.linkedin.normalized+json+2.1"},
             )
+
             data = res.json()
 
             elements = data.get("included", [])
